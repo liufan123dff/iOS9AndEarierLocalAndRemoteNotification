@@ -24,9 +24,13 @@
 //        UIUserNotificationSettings *notiSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
 //        
 //        [application registerUserNotificationSettings:notiSettings];
-        [self registerLocalNotification];
+        [self registerNotification];
     } else{ // ios7
         [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert)];
+    }
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
+//        [self receiveRemoteNotification:[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]];
+        [self showAlertView:[NSString stringWithFormat:@"%@",[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]]];
     }
     return YES;
 }
@@ -47,7 +51,7 @@
     NSLog(@"---Token--%@", deviceTokenStr);
 }
 
-- (void)registerLocalNotification
+- (void)registerNotification
 {
     //创建消息上面要添加的动作
     UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];

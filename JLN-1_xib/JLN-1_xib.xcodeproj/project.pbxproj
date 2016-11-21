@@ -69,6 +69,7 @@
 		18D315491A4C14DC00CB128D /* RedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RedView.xib; sourceTree = "<group>"; };
 		18D3154E1A4C157400CB128D /* RedViewOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedViewOwner.h; sourceTree = "<group>"; };
 		18D3154F1A4C157400CB128D /* RedViewOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedViewOwner.m; sourceTree = "<group>"; };
+		840C94361DE297EA00C148F9 /* JLN-1_xib.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "JLN-1_xib.entitlements"; sourceTree = "<group>"; };
 		FC79665D1D1A8A63006F58A9 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +160,7 @@
 		18D3151B1A4C0AFC00CB128D /* JLN-1_xib */ = {
 			isa = PBXGroup;
 			children = (
+				840C94361DE297EA00C148F9 /* JLN-1_xib.entitlements */,
 				187764B01A50388B0042DA62 /* YellowView */,
 				182D03C01A5FB25E00423A1E /* PurpleView */,
 				187764BB1A5044FD0042DA62 /* BlueView */,
@@ -272,7 +274,8 @@
 				TargetAttributes = {
 					18D315181A4C0AFC00CB128D = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = YL3UJFY66T;
+						DevelopmentTeam = LRH898RJ73;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -467,14 +470,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = "JLN-1_xib/JLN-1_xib.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer: CunLu Lu (LR8438TPC9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = LRH898RJ73;
 				GCC_PREFIX_HEADER = "JLN-1_xib/PrefixHeader.pch";
 				INFOPLIST_FILE = "JLN-1_xib/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.liufan.test22;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raiyi.LFNotification;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "046aac21-de28-45f9-b08f-24ee7036e569";
+				PROVISIONING_PROFILE_SPECIFIER = LFNotification;
 			};
 			name = Debug;
 		};
@@ -482,14 +488,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = "JLN-1_xib/JLN-1_xib.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer: CunLu Lu (LR8438TPC9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = LRH898RJ73;
 				GCC_PREFIX_HEADER = "JLN-1_xib/PrefixHeader.pch";
 				INFOPLIST_FILE = "JLN-1_xib/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.liufan.test22;
+				PRODUCT_BUNDLE_IDENTIFIER = com.raiyi.LFNotification;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "046aac21-de28-45f9-b08f-24ee7036e569";
+				PROVISIONING_PROFILE_SPECIFIER = LFNotification;
 			};
 			name = Release;
 		};
