@@ -1,7 +1,7 @@
 <?php
 
 // ??????????deviceToken???????????????
-$deviceToken = 'e56578e2b1cf32a98f825c7603598e3fb11ea08d82e20390577773722614a0ee';
+$deviceToken = '91d8efe11762972b6b977fbb1340d8c25ff8d86431e7fb33251a59a38956522f';
 
 // Put your private key's passphrase here:
 $passphrase = '123456';
@@ -20,8 +20,13 @@ stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
  //$fp = stream_socket_client(?ssl://gateway.push.apple.com:2195?, $err, $errstr, 60, //STREAM_CLIENT_CONNECT, $ctx);
 //?????????????appstore??????
 $fp = stream_socket_client(
-'ssl://gateway.sandbox.push.apple.com:2195', $err,
-$errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+	'ssl://gateway.sandbox.push.apple.com:2195', 
+	$err,
+	$errstr, 
+	60, 
+	STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, 
+	$ctx
+	);
 
 if (!$fp)
 exit("Failed to connect: $err $errstr" . PHP_EOL);

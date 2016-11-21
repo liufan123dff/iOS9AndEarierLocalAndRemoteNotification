@@ -7,7 +7,9 @@
 //
 
 #import "AppDelegate.h"
-
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
 @interface AppDelegate ()
 
 @end
@@ -53,6 +55,15 @@
 
 - (void)registerNotification
 {
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
+        [self registeriOS10Notification];
+    } else {
+        [self registeriOS8Notification];
+    }
+}
+
+- (void)registeriOS8Notification
+{
     //创建消息上面要添加的动作
     UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];
     action1.identifier = kNotificationActionIdentifileStar;
@@ -92,7 +103,108 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:uns];
 }
 
-// 本地通知回调函数，当应用程序在前台时调用
+
+- (void)registeriOS10Notification
+{
+    //iOS10特有
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    // 必须写代理，不然无法监听通知的接收与点击
+    center.delegate = self;
+    
+    /**
+     UNNotificationActionOptionAuthenticationRequired: 锁屏时需要解锁才能触发事件，触发后不会直接进入应用
+     UNNotificationActionOptionDestructive：字体会显示为红色，且锁屏时触发该事件不需要解锁，触发后不会直接进入应用
+     UNNotificationActionOptionForeground：锁屏时需要解锁才能触发事件，触发后会直接进入应用界面
+     */
+    UNNotificationAction *action1 = [UNNotificationAction actionWithIdentifier:kNotificationActionIdentifileStar title:@"赞" options:UNNotificationActionOptionAuthenticationRequired];
+    UNTextInputNotificationAction *action2 = [UNTextInputNotificationAction actionWithIdentifier:kNotificationActionIdentifileComment title:@"评论一下吧" options:UNNotificationActionOptionForeground textInputButtonTitle:@"评论" textInputPlaceholder:@"请输入评论"];
+    UNNotificationCategory *catetory = [UNNotificationCategory categoryWithIdentifier:kNotificationCategoryIdentifile actions:@[action1, action2] intentIdentifiers:@[kNotificationActionIdentifileStar, kNotificationActionIdentifileComment] options:UNNotificationCategoryOptionNone];
+    
+    [center setNotificationCategories:[NSSet setWithObject:catetory]];
+    
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if (granted) {
+            //用户点击允许
+            NSLog(@"注册成功");
+            [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+                NSLog(@"%@", settings);
+            }];
+        } else {
+            //用户点击不允许
+            NSLog(@"注册失败");
+        }
+    }];
+}
+
+#pragma mark - iOS10 接收推送的两个方法
+/**
+ 本地和远程推送合为一个，通过 response.notification.request.trigger 来区分
+ 1.UNPushNotificationTrigger （远程通知） 远程推送的通知类型
+ 
+ 2.UNTimeIntervalNotificationTrigger （本地通知） 一定时间之后，重复或者不重复推送通知。我们可以设置timeInterval（时间间隔）和repeats（是否重复）。
+ 
+ 3.UNCalendarNotificationTrigger（本地通知） 一定日期之后，重复或者不重复推送通知 例如，你每天8点推送一个通知，只要dateComponents为8，如果你想每天8点都推送这个通知，只要repeats为YES就可以了。
+ 
+ 4.UNLocationNotificationTrigger （本地通知）地理位置的一种通知，
+ 当用户进入或离开一个地理区域来通知。在CLRegion标识符必须是唯一的。因为如果相同的标识符来标识不同区域的UNNotificationRequests，会导致不确定的行为。
+ */
+//接收到通知的事件
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+    //这个和下面的userNotificationCenter:didReceiveNotificationResponse withCompletionHandler: 处理方法一样
+    NSDictionary *userInfo = notification.request.content.userInfo;
+    //收到推送的请求
+    UNNotificationRequest *request = notification.request;
+    //收到推送的内容
+    UNNotificationContent *content = request.content;
+    NSNumber *badge = content.badge;
+    NSString *body = content.body;
+    NSString *title = content.title;
+    NSString *subTitle = content.subtitle;
+    UNNotificationSound *sound = content.sound;
+    
+    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+    } else {
+        // 判断为本地通知
+        NSLog(@"iOS10 应用在前台收到本地通知:{\\\\nbody:%@，\\\\ntitle:%@,\\\\nsubtitle:%@,\\\\nbadge：%@，\\\\nsound：%@，\\\\nuserInfo：%@\\\\n}", body, title, subTitle, badge, sound, userInfo);
+    }
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+}
+
+//通知的点击事件
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+{
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    //收到推送的请求
+    UNNotificationRequest *request = response.notification.request;
+    //收到推送的内容
+    UNNotificationContent *content = request.content;
+    NSNumber *badge = content.badge;
+    NSString *body = content.body;
+    NSString *title = content.title;
+    NSString *subTitle = content.subtitle;
+    UNNotificationSound *sound = content.sound;
+    
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+    } else {
+        // 判断为本地通知
+        NSLog(@"iOS10 应用在后台点击推送消息收到本地通知:{\\\\nbody:%@，\\\\ntitle:%@,\\\\nsubtitle:%@,\\\\nbadge：%@，\\\\nsound：%@，\\\\nuserInfo：%@\\\\n}", body, title, subTitle, badge, sound, userInfo);
+    }
+    NSString *actionIdentifile = response.actionIdentifier;
+    if ([actionIdentifile isEqualToString:kNotificationActionIdentifileStar]) {
+        [self showAlertView:@"点了赞"];
+    } else if ([actionIdentifile isEqualToString:kNotificationActionIdentifileComment]) {
+        [self showAlertView:[(UNTextInputNotificationResponse *)response userText]];
+    }
+    
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+}
+
+
+#pragma mark - iOS9 及之前方法
+// (iOS9及之前)本地通知回调函数，当应用程序在前台时调用
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSLog(@"%@", notification.userInfo);

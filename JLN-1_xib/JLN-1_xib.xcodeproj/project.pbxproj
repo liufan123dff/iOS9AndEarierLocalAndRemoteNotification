@@ -26,6 +26,7 @@
 		18D315481A4C111E00CB128D /* GreenView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D315471A4C111E00CB128D /* GreenView.xib */; };
 		18D3154A1A4C14DC00CB128D /* RedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D315491A4C14DC00CB128D /* RedView.xib */; };
 		18D315501A4C157400CB128D /* RedViewOwner.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D3154F1A4C157400CB128D /* RedViewOwner.m */; };
+		840C94391DE2B8B900C148F9 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 840C94381DE2B8B900C148F9 /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		18D3154E1A4C157400CB128D /* RedViewOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedViewOwner.h; sourceTree = "<group>"; };
 		18D3154F1A4C157400CB128D /* RedViewOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedViewOwner.m; sourceTree = "<group>"; };
 		840C94361DE297EA00C148F9 /* JLN-1_xib.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "JLN-1_xib.entitlements"; sourceTree = "<group>"; };
+		840C94381DE2B8B900C148F9 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		FC79665D1D1A8A63006F58A9 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840C94391DE2B8B900C148F9 /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +148,7 @@
 				18D3151B1A4C0AFC00CB128D /* JLN-1_xib */,
 				18D315351A4C0AFC00CB128D /* JLN-1_xibTests */,
 				18D3151A1A4C0AFC00CB128D /* Products */,
+				840C94371DE2B8B900C148F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -225,6 +229,14 @@
 			name = RedView;
 			sourceTree = "<group>";
 		};
+		840C94371DE2B8B900C148F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				840C94381DE2B8B900C148F9 /* UserNotifications.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -277,6 +289,9 @@
 						DevelopmentTeam = LRH898RJ73;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -422,7 +437,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -458,7 +473,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -479,7 +494,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raiyi.LFNotification;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "046aac21-de28-45f9-b08f-24ee7036e569";
+				PROVISIONING_PROFILE = "1901d92c-5f9d-483b-a124-14b01df8eabf";
 				PROVISIONING_PROFILE_SPECIFIER = LFNotification;
 			};
 			name = Debug;
@@ -497,7 +512,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.raiyi.LFNotification;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "046aac21-de28-45f9-b08f-24ee7036e569";
+				PROVISIONING_PROFILE = "1901d92c-5f9d-483b-a124-14b01df8eabf";
 				PROVISIONING_PROFILE_SPECIFIER = LFNotification;
 			};
 			name = Release;
