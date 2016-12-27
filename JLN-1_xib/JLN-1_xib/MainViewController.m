@@ -60,6 +60,8 @@
     
     /* 7. PurpleView.xib文件中有多个视图控件，将其全部log出来以查看xib中的视图结构 */
     [self logViewsFromXIB];
+    
+    [self loadLabel];
 }
 
 - (void)loadBlueViewFromXIB {
@@ -149,6 +151,18 @@
 //        NSLog(@"%d : %@", i, [NSString stringWithUTF8String:object_getClassName(obj)]);
     }
 //    NSLog(@"%s end", __func__);
+}
+
+- (void)loadLabel{
+//    UILabel *label = [[UILabel alloc] init];
+//    label.text = [[[NSUserDefaults standardUserDefaults] objectForKey:@"ssss"] description];
+//    label.numberOfLines = 0;
+//    CGRect rect = self.grayViewController.view.frame;
+//    rect.origin.x = self.grayViewController.view.frame.origin.x;
+//    rect.origin.y = self.grayViewController.view.frame.origin.y + 80.0f;
+//    label.frame = rect;
+//    [self.view addSubview:label];
+    
 }
 
 - (void)didReceiveMemoryWarning {

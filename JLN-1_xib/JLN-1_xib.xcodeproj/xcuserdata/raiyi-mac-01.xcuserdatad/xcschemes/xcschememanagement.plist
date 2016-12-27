@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>NofificationExtension.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>18D315311A4C0AFC00CB128D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>84B9DD951DE429F500491992</key>
 		<dict>
 			<key>primary</key>
 			<true/>

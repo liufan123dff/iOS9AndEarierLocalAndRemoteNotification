@@ -10,7 +10,7 @@
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
-@interface AppDelegate ()
+@interface AppDelegate ()<UNUserNotificationCenterDelegate>
 
 @end
 
@@ -21,7 +21,7 @@
     // Override point for customization after application launch.
     if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
     {
-        //IOS8
+        //IOS8及以后
         //创建UIUserNotificationSettings，并设置消息的显示类类型
 //        UIUserNotificationSettings *notiSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
 //        
@@ -30,9 +30,11 @@
     } else{ // ios7
         [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert)];
     }
+    
+    NSLog(@"%@", [[[NSUserDefaults standardUserDefaults] objectForKey:@"ssss"] description]);
     if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
-//        [self receiveRemoteNotification:[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]];
-        [self showAlertView:[NSString stringWithFormat:@"%@",[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]]];
+        NSLog(@"**********----->>>%@",[NSString stringWithFormat:@"%@",[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]]);
+        [[NSUserDefaults standardUserDefaults] setObject:launchOptions forKey:@"ssss"];
     }
     return YES;
 }
@@ -128,6 +130,7 @@
             NSLog(@"注册成功");
             [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
                 NSLog(@"%@", settings);
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
             }];
         } else {
             //用户点击不允许
@@ -148,7 +151,8 @@
  4.UNLocationNotificationTrigger （本地通知）地理位置的一种通知，
  当用户进入或离开一个地理区域来通知。在CLRegion标识符必须是唯一的。因为如果相同的标识符来标识不同区域的UNNotificationRequests，会导致不确定的行为。
  */
-//接收到通知的事件
+
+//接收到通知的事件,只有当app在前台时才会被调用
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {
     //这个和下面的userNotificationCenter:didReceiveNotificationResponse withCompletionHandler: 处理方法一样
@@ -164,12 +168,15 @@
     UNNotificationSound *sound = content.sound;
     
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+        NSLog(@"iOS10 接收到通知的事件-前台收到远程通知:%@", userInfo);
     } else {
         // 判断为本地通知
-        NSLog(@"iOS10 应用在前台收到本地通知:{\\\\nbody:%@，\\\\ntitle:%@,\\\\nsubtitle:%@,\\\\nbadge：%@，\\\\nsound：%@，\\\\nuserInfo：%@\\\\n}", body, title, subTitle, badge, sound, userInfo);
+        NSLog(@"iOS10 接收到通知的事件-应用在前台收到本地通知:{\\\\nbody:%@，\\\\ntitle:%@,\\\\nsubtitle:%@,\\\\nbadge：%@，\\\\nsound：%@，\\\\nuserInfo：%@\\\\n}", body, title, subTitle, badge, sound, userInfo);
     }
-    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+    
+    // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+    // 在前台处理过了之后，就不应该在弹出这些提醒了。这里只是做个演示
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
 //通知的点击事件
@@ -187,16 +194,20 @@
     UNNotificationSound *sound = content.sound;
     
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+        NSLog(@"iOS10 通知的点击事件-收到远程通知:%@", userInfo);
     } else {
         // 判断为本地通知
-        NSLog(@"iOS10 应用在后台点击推送消息收到本地通知:{\\\\nbody:%@，\\\\ntitle:%@,\\\\nsubtitle:%@,\\\\nbadge：%@，\\\\nsound：%@，\\\\nuserInfo：%@\\\\n}", body, title, subTitle, badge, sound, userInfo);
+        NSLog(@"iOS10 通知的点击事件-应用在后台点击推送消息收到本地通知:{\\\\nbody:%@，\\\\ntitle:%@,\\\\nsubtitle:%@,\\\\nbadge：%@，\\\\nsound：%@，\\\\nuserInfo：%@\\\\n}", body, title, subTitle, badge, sound, userInfo);
     }
     NSString *actionIdentifile = response.actionIdentifier;
     if ([actionIdentifile isEqualToString:kNotificationActionIdentifileStar]) {
         [self showAlertView:@"点了赞"];
     } else if ([actionIdentifile isEqualToString:kNotificationActionIdentifileComment]) {
         [self showAlertView:[(UNTextInputNotificationResponse *)response userText]];
+    }else if([actionIdentifile isEqualToString:UNNotificationDefaultActionIdentifier]){
+        [self showAlertView:@"点击了通知本体，没选择选项"];
+    }else if([actionIdentifile isEqualToString:UNNotificationDismissActionIdentifier]){
+        [self showAlertView:@"除掉了通知"];
     }
     
     completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
